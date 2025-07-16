@@ -10,7 +10,7 @@ public class Bishop extends Piece{
             image = getImage("white_Bishop.png");
         }
         else {
-            image = getImage("black_Bishop.png");
+            image = getImage("/black_Bishop.png");
         }
     }
 }
