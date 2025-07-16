@@ -134,6 +134,12 @@ public class GamePanel extends JPanel implements Runnable{
                 simulate();
             }
         }
+        if(mouse.pressed == false){
+            if(activeP != null){
+                activeP.updatePosition();
+                activeP = null; // reset active piece after placing it
+            }
+        }
     }
     private void simulate(){
 

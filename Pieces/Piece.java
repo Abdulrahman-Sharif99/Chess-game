@@ -53,6 +53,12 @@ public class Piece {
     public int getRow(int Y) {
         return (y + Board.HALF_SQUARE_SIZE) / Board.SQUARE_SIZE;
     }
+    public void updatePosition() {
+        x = getX(col);
+        y = getY(row);
+        preCol = getCol(x);
+        preRow = getRow(y);
+    }
 
     public void draw(Graphics2D g2) {
         if (image != null) {
