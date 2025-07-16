@@ -137,49 +137,47 @@ public class GamePanel extends JPanel implements Runnable{
                 simulate();
             }
         }
-        if(mouse.pressed == false){
-            if(activeP != null){
-                if(validSquare){
+        if (mouse.pressed == false) {
+            if (activeP != null) {
+                if (validSquare) {
+                    // Actually remove only now
+                    if (activeP.hittingP != null) {
+                        pieces.remove(activeP.hittingP);
+                    }
 
-                    //move confirmed
-
-                    // Updates the piece list in case of a piece has been captured and remvoed
-                    copyPieces(simPieces, pieces);
                     activeP.updatePosition();
-                }
-                else{
-                    //move cancelled
-                    copyPieces(simPieces, pieces);
+                    copyPieces(pieces, simPieces);
+
+                    // Switch turn, etc.
+                } else {
                     activeP.resetPosition();
-                    activeP = null; 
+                    copyPieces(pieces, simPieces);
                 }
+                activeP = null;
             }
         }
     }
-    private void simulate(){
-
+    private void simulate() {
         canMove = false;
         validSquare = false;
 
-        //reset the piece list in every loop
-        copyPieces(simPieces, pieces);
+        // Reset simulation pieces each loop
+        copyPieces(pieces, simPieces);
 
         activeP.x = mouse.x - Board.HALF_SQUARE_SIZE;
         activeP.y = mouse.y - Board.HALF_SQUARE_SIZE;
         activeP.col = activeP.getCol(mouse.x);
         activeP.row = activeP.getRow(mouse.y);
 
-        //Check if the activeP can move to the square
-        if(activeP.canMove(activeP.col, activeP.row)){
+        if (activeP.canMove(activeP.col, activeP.row)) {
             canMove = true;
-
-            //If hitting a piece, remove it from the simulation
-            if(activeP.hittingP != null){
-                simPieces.remove(activeP.hittingP.getIndex());
-            }
             validSquare = true;
+
+            // Do not remove hitting piece here!
+            // Just mark it for later possible removal
         }
     }
+
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);

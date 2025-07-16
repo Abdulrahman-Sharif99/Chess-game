@@ -13,4 +13,16 @@ public class Rook extends Piece{
             image = getImage("black_Rook.png");
         }
     }
+
+    public boolean canMove(int targetCol, int targetRow){
+
+        if(isWithinBoard(targetCol, targetRow) && isSameSquare(targetCol, targetRow) == false){
+            if(Math.abs(targetCol-preCol) * Math.abs(targetRow - preRow) ==0){
+                if(isValidSquare(targetCol, targetRow) && pieceIsOnStraightLine(targetCol, targetRow) == false){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
