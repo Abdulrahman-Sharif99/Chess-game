@@ -5,7 +5,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.ArrayList;
+import java.awt.Font;
 
 import javax.swing.JPanel;
 
@@ -148,7 +150,8 @@ public class GamePanel extends JPanel implements Runnable{
                     activeP.updatePosition();
                     copyPieces(pieces, simPieces);
 
-                    // Switch turn, etc.
+                    // Switch turn
+                    switchTurns();
                 } else {
                     activeP.resetPosition();
                     copyPieces(pieces, simPieces);
@@ -178,6 +181,15 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
+    private void switchTurns() {
+        if(currentColor == WHITE) {
+            currentColor = BLACK;
+        } else {
+            currentColor = WHITE;
+        }
+        activeP = null;
+    }
+
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -200,6 +212,17 @@ public class GamePanel extends JPanel implements Runnable{
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
             }
             activeP.draw(g2);
+        }
+
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2.setFont(new Font("Arial", Font.PLAIN, 40));
+        g2.setColor(Color.white);
+
+        if(currentColor == WHITE){
+            g2.drawString("White's turn", 820, 550);
+        }
+        else {
+            g2.drawString("Black's turn", 820, 250);
         }
     }
 }
