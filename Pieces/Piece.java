@@ -8,14 +8,18 @@ import javax.imageio.ImageIO;
 
 import main.Board;
 import main.GamePanel;
+import main.Type;
 
 public class Piece {
+
+    public Type type;
     public BufferedImage image;
     public int x, y;
     public int col, row, preCol, preRow;
     public int color;
     public Piece hittingP;
     public boolean moved = false;
+    public boolean twoStepped = false;
 
     public Piece(int color, int col, int row){
         this.color = color;
@@ -66,6 +70,12 @@ public class Piece {
     }
 
     public void updatePosition() {
+
+        if(type == Type.Pawn){
+            if(Math.abs(preRow - row) == 2){
+                twoStepped = true;
+            }
+        }
         x = getX(col);
         y = getY(row);
         preCol = getCol(x);
