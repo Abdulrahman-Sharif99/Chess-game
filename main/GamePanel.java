@@ -26,6 +26,7 @@ public class GamePanel extends JPanel implements Runnable{
     public static ArrayList<Piece> pieces = new ArrayList<>();
     public static ArrayList<Piece> simPieces = new ArrayList<>();
     Piece activeP;
+    public static Piece castlingP ;
 
     //Starting order 
     public static final int WHITE = 0;
@@ -150,6 +151,10 @@ public class GamePanel extends JPanel implements Runnable{
                     activeP.updatePosition();
                     copyPieces(pieces, simPieces);
 
+                    if(castlingP != null){
+                        castlingP.updatePosition();
+                    }
+
                     // Switch turn
                     switchTurns();
                 } else {
@@ -167,6 +172,13 @@ public class GamePanel extends JPanel implements Runnable{
         // Reset simulation pieces each loop
         copyPieces(pieces, simPieces);
 
+        // Reset the castling piece's position
+        if(castlingP != null) {
+            castlingP.col = castlingP.preCol;
+            castlingP.x = castlingP.getX(castlingP.col);
+            castlingP = null;
+        }
+
         activeP.x = mouse.x - Board.HALF_SQUARE_SIZE;
         activeP.y = mouse.y - Board.HALF_SQUARE_SIZE;
         activeP.col = activeP.getCol(mouse.x);
@@ -174,10 +186,23 @@ public class GamePanel extends JPanel implements Runnable{
 
         if (activeP.canMove(activeP.col, activeP.row)) {
             canMove = true;
+
+            checkCastling();
+
             validSquare = true;
 
-            // Do not remove hitting piece here!
-            // Just mark it for later possible removal
+        }
+    }
+
+    private void checkCastling(){
+        if(castlingP != null){
+            if(castlingP.col == 0){
+                castlingP.col +=3;
+            }
+            else if(castlingP.col ==7){
+                castlingP.col -=2;
+            }
+            castlingP.x = castlingP.getX(castlingP.col);
         }
     }
 
