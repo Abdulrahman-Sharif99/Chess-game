@@ -42,6 +42,7 @@ public class GamePanel extends JPanel implements Runnable{
     boolean validSquare;
     boolean promotion;
     boolean gameOver;
+    boolean stalemate;
 
     public GamePanel(){
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -132,7 +133,7 @@ public class GamePanel extends JPanel implements Runnable{
             promoting();
         }
 
-        else if(gameOver == false){
+        else if(gameOver == false && isStalemate() == false){
             //Check if mouse is pressed
             if(mouse.pressed){
                 //check if the aciveP is null
@@ -173,6 +174,9 @@ public class GamePanel extends JPanel implements Runnable{
                         if(isKinginCheck() && isCheckMate()){
                             gameOver = true;
 
+                        }
+                        else if(isStalemate() && isKinginCheck() == false){
+                            stalemate = true;
                         }
                         else{
                             //continues the game
@@ -431,6 +435,25 @@ public class GamePanel extends JPanel implements Runnable{
         return isValidMove;
     }
 
+    private boolean isStalemate(){
+
+        int count = 0;
+        //counts number of pieces of the opponent
+        for(Piece piece: simPieces){
+            if(piece.color != currentColor){
+                count++;
+            }
+        }
+
+        //If opponent only has one piece (King) left
+        if(count == 1){
+            if(KingCanMove(getKing(true)) == false){
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
     private void checkCastling(){
         if(castlingP != null){
@@ -587,6 +610,10 @@ public class GamePanel extends JPanel implements Runnable{
             g2.setColor(Color.green);
             g2.drawString(s, 200, 420);
         }
-
+        if(stalemate){
+            g2.setFont(new Font("Arial", Font.PLAIN,90));
+            g2.setColor(Color.blue);
+            g2.drawString("Stalemate!", 200, 420);
+        }
     }
 }
